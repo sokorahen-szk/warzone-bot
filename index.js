@@ -41,7 +41,7 @@ const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
         if (dC) {
             discord.then( res => {
                 dC.send(
-                    `<@${member.user.id}>` +
+                    `<@${member.user.id}>\n` +
                     _this.messageOptimize(res.message), {
                         files: [res.snap_image1]
                     }
