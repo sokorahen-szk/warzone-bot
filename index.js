@@ -22,34 +22,44 @@ const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
         });
     });
 
-    /* メッセージ送信時 */
+    /*
+     * メッセージ送信時
+     * 主にユーザが入力したコマンドを解釈する時にここに分岐を書いて行きます
+     */
     _this.on("message", message => {
 
         if(_this.checkBot(message)) return;
-
-        let msg = message.content;
-
-        discord.then( res => {
-            message.reply(res.message)
-                .then( success => console.log("send message"))
-                .catch(console.error);
-        });
 
         return;
     });
 
     /* チャンネル参加時 */
     _this.on("guildMemberAdd", member => {
-        if (!member.guild.channels.cache.find(ch => ch.name == process.env.GUIDELINE_CHANNEL_NAME)) {
-            return;
+
+        let dC = member.guild.channels.cache.find(ch => ch.name == process.env.GUIDELINE_CHANNEL_NAME);
+
+        if (dC) {
+            discord.then( res => {
+                dC.send(
+                    `<@${member.user.id}>` +
+                    _this.messageOptimize(res.message), {
+                        files: [res.snap_image1]
+                    }
+                );
+            });
         }
 
-        channel.send(`Welcome to the server, ${member}`);
+        return;
     });
 
     /* 自分がBOTかどうか */
     _this.checkBot = (message => {
         return message.author.bot;
+    });
+
+    /* 改行コードを入れる */
+    _this.messageOptimize = (message => {
+        return message.replace(/##/g, '\n');
     });
 
     /*
