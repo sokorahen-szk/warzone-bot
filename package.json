@@ -16,9 +16,7 @@
     "dotenv": "^8.2.0",
     "firebase": "^7.13.2",
     "firebase-admin": "^8.10.0",
-    "lodash": "^4.17.15"
-  },
-  "devDependencies": {
+    "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28"
   }

@@ -54,7 +54,7 @@ const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
 
     /* 切断 */
     _this.on('disconnect', () => {
-        clearTimeout(client.ws.connection.ratelimit.resetTimer);
+        clearTimeout(_this.ws.connection.ratelimit.resetTimer);
     });
 
     /* 自分がBOTかどうか */
