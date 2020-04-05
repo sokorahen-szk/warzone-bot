@@ -1,13 +1,15 @@
 const Discord = require("discord.js");
-const discordClient = new Discord.Client();
 const moment = require("moment");
 const firebase = require("firebase/app");
+
+const commandAction = require("./modules/commandAction.js");
 
 require("firebase/database");
 require('dotenv').config();
 
-firebase.initializeApp(require("./firebase.json"));
+firebase.initializeApp(require("./config/firebase.json"));
 
+const discordClient = new Discord.Client();
 const db = firebase.database();
 const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
 
@@ -30,11 +32,15 @@ const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
 
         if(_this.checkBot(message)) return;
 
+        if(!commandAction.parser(message.content)) return;
+
         return;
     });
 
     /* チャンネル参加時 */
     _this.on("guildMemberAdd", member => {
+
+        if(_this.checkBot(message)) return;
 
         let dC = member.guild.channels.cache.find(ch => ch.name == process.env.GUIDELINE_CHANNEL_NAME);
 
