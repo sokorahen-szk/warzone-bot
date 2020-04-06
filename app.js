@@ -13,9 +13,6 @@ const discordClient = new Discord.Client();
 const db = firebase.database();
 const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
 
-let response = commandAction.parser("/history dsdsddsc 3ddsds 2332");
-console.log(response);
-
 ( _this => {
 
     let discord;
@@ -33,13 +30,9 @@ console.log(response);
      */
     _this.on("message", message => {
 
-        let response;
-
         if(_this.checkBot(message)) return;
 
-        response = commandAction.parser(message.content);
-
-        if( !response ) return;
+        commandAction.parser(message.content, message.channel);
 
         return;
     });

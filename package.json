@@ -10,6 +10,7 @@
   "dependencies": {
     "@firebase/app": "^0.6.1",
     "@firebase/database": "^0.5.25",
+    "axios": "^0.19.2",
     "discord.js": "^12.1.1",
     "dotenv": "^8.2.0",
     "firebase": "^7.13.2",
