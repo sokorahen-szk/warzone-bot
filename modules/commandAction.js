@@ -33,7 +33,7 @@ module.exports = {
                     return player == res.name;
                 });
                 callback.send(
-                    result ? `${result.name} さんの直近 ${limit} 戦分のデータ\n勝利：${result.win}　敗北：${result.lost}　勝率：${result.win_ratio}%` : 'そんな人いないようです・・・'
+                    result ? `${result.name} さんの直近 ${limit} 戦分のデータ\n勝利：${result.win}　敗北：${result.lost}　勝率：${result.win_ratio}%` : `${result.name}さんって人はいないです・・・`
                 );
             }
         });
