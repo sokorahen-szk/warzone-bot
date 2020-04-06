@@ -10,7 +10,7 @@ module.exports = {
     },
 
     history(options) {
-        console.log(options)
+        console.log(options);
     }
 
 }
