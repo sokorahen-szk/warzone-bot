@@ -1,5 +1,12 @@
-const axios = require("axios");
+const httpClient = require("./httpClient.js");
+const notifiyAlertClient = require("./httpClient.js");
+
 require('dotenv').config();
+
+/* エラー時の通知先 */
+notifiyAlertClient.initialize(
+    `${process.env.NOTIFICATION_POST_WEBHOOK_URL}${process.env.NOTIFICATION_POST_WEBHOOK_KEY}`
+);
 
 module.exports = {
     parser(command, callback) {
@@ -7,10 +14,9 @@ module.exports = {
 
         try {
             if(!action) return null;
-            return this[action[1]](action[2].split(' '), callback);
+            this[action[1]](action[2].split(' '), callback);
         } catch (e) {
-            console.log(e)
-            return null;
+            throw e;
         }
     },
 
@@ -24,29 +30,32 @@ module.exports = {
             return;
         }
 
-        axios.get(
-            process.env.BASE_API_URL + 'recent_win_ratio_bulk',
+        httpClient.get(
             {
                 params: {
+                    name:   player,
                     recent: limit
                 }
-            }
+            },
+            process.env.BASE_API_URL + 'recent_win_ratio'
         )
         .then (res => {
-            let result = '';
-            if(res.data.err == '') {
-                result = res.data.results.find( res => {
-                    return player == res.name.toLowerCase();
-                });
+            if(!res.data.api_err) {
+                console.log(res.data)
                 callback.send(
-                    result ? `${result.name} さんの直近 ${limit} 戦分のデータ\n勝利：${result.win}　敗北：${result.lost}　勝率：${result.win_ratio}%` : `${player}さんって人はいないです・・・`
+                    res.data.err == '' ? `${res.data.name} さんの直近 ${res.data.recent} 戦分のデータ\n勝利：${res.data.win}　敗北：${res.data.lost}　勝率：${res.data.win_ratio}%` : `${res.data.err}`
                 );
+            } else {
+                callback.send("おや、BOTの様子がおかしいようだ。");
             }
         })
-        .catch ( error => {
-            callback.send("おや、BOTの様子がおかしいようだ。");
+        .catch ( err => {
+            notifiyAlertClient.post({content: err});
+            callback.send(err);
         });
 
+
+        return;
     }
 
 }

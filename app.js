@@ -1,12 +1,18 @@
 const Discord = require("discord.js");
-const moment = require("moment");
 const firebase = require("firebase/app");
 
 const commandAction = require("./modules/commandAction.js");
+const httpClient = require("./modules/httpClient.js");
 
 require("firebase/database");
 require('dotenv').config();
 
+/* エラー時の通知先 */
+httpClient.initialize(
+    `${process.env.NOTIFICATION_POST_WEBHOOK_URL}${process.env.NOTIFICATION_POST_WEBHOOK_KEY}`
+);
+
+/* Firebaseの設定 */
 firebase.initializeApp(require("./config/firebase.json"));
 
 const discordClient = new Discord.Client();
@@ -15,12 +21,15 @@ const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
 
 ( _this => {
 
-    let discord;
+    let discordConfig;
 
     /* 起動時の処理 */
     _this.on("ready", () => {
-        discord = ref.once("value").then( res => {
+        discordConfig = ref.once("value").then( res => {
             return res.val();
+        })
+        .catch( err => {
+            httpClient.post({content: err});
         });
     });
 
@@ -31,8 +40,11 @@ const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
     _this.on("message", message => {
 
         if(_this.checkBot(message)) return;
-
-        commandAction.parser(message.content, message.channel);
+        try {
+            commandAction.parser(message.content, message.channel);
+        } catch(err) {
+            httpClient.post({content: err});
+        }
 
         return;
     });
@@ -45,14 +57,17 @@ const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
         let dC = member.guild.channels.cache.find(ch => ch.name == process.env.GUIDELINE_CHANNEL_NAME);
 
         if (dC) {
-            discord.then( res => {
+            discordConfig.then( res => {
                 dC.send(
                     `<@${member.user.id}>\n` +
                     _this.messageOptimize(res.message), {
                         files: [res.snap_image1]
                     }
                 );
-            });
+            })
+            .catch( err => {
+                httpClient.post({content: err});
+            })
         }
 
         return;
