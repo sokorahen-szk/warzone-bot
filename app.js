@@ -41,7 +41,7 @@ const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
 
         if(_this.checkBot(message)) return;
         try {
-            commandAction.parser(message.content, message.channel);
+            commandAction.parser(message.content, message, this);
         } catch(err) {
             httpClient.post({content: err});
         }

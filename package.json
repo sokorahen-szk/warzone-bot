@@ -8,16 +8,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "^0.1.0",
     "@firebase/app": "^0.6.1",
     "@firebase/database": "^0.5.25",
+    "agh.sprintf": "0.0.11",
     "axios": "^0.19.2",
     "discord.js": "^12.1.1",
     "dotenv": "^8.2.0",
+    "ffmpeg-static": "^4.1.0",
     "firebase": "^7.13.2",
     "firebase-admin": "^8.10.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "moment-timezone": "^0.5.28"
+    "moment-timezone": "^0.5.28",
+    "opusscript": "0.0.7"
   },
   "devDependencies": {}
 }
