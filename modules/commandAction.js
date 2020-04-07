@@ -3,7 +3,7 @@ require('dotenv').config();
 
 module.exports = {
     parser(command, callback) {
-        let action = command.match(/^\/([a-zA-Z]+)\s([a-zA-Z0-9\s]+)+?/);
+        let action = command.match(/^\/([a-zA-Z]+)\s([a-zA-Z0-9\s_-]+)+?/);
 
         try {
             if(!action) return null;
@@ -30,10 +30,10 @@ module.exports = {
             let result = '';
             if(res.data.err == '') {
                 result = res.data.results.find( res => {
-                    return player == res.name;
+                    return player.toLowerCase() == res.name.toLowerCase();
                 });
                 callback.send(
-                    result ? `${player} さんの直近 ${limit} 戦分のデータ\n勝利：${result.win}　敗北：${result.lost}　勝率：${result.win_ratio}%` : `${player}さんって人はいないです・・・`
+                    result ? `${result.name} さんの直近 ${limit} 戦分のデータ\n勝利：${result.win}　敗北：${result.lost}　勝率：${result.win_ratio}%` : `${player}さんって人はいないです・・・`
                 );
             }
         });
