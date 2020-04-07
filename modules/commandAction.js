@@ -67,7 +67,7 @@ module.exports = {
         let tauntNo = typeof options[0] != 'undefined' ? Number(options[0]) : null;
 
         //バリデーション入れるまで　バグ回避用にへんてこコードを追加しとくぜ！
-        if( !Number.isInteger(tauntNo) || tauntNo === null || tauntNo < 1 || 43 < tauntNo) {
+        if( !Number.isInteger(tauntNo) || tauntNo === null || tauntNo < 1 || 11 < tauntNo) {
             callback.channel.send("フォーマットが正しくありません\n例：　/taunt <タウント番号 範囲 1 - 11>　");
             return;
         }
