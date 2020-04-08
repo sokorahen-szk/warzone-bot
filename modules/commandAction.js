@@ -111,31 +111,35 @@ module.exports = {
         )
         .then( res => {
             if(!res.data.api_err) {
-                res.data.results.forEach( (video, index) => {
-                    callback.channel.send({
-                        embed: {
-                            author: {
-                                name: video.user + ' の配信を見る',
-                                url: video.link,
-                            },
-                            thumbnail: {
-                                url: video.thumbnail
-                            },
-                            description: video.status,
-                            url: video.link,
-                            fields: [
-                                {
-                                    name: "視聴者数",
-                                    value: video.viewers.replace(/\(|\)/g, ''),
+                if(0 < res.data.results.length) {
+                    res.data.results.forEach( (video, index) => {
+                        callback.channel.send({
+                            embed: {
+                                author: {
+                                    name: video.user + ' の配信を見る',
+                                    url: video.link,
                                 },
-                                {
-                                    name: "経過時間",
-                                    value: video.showtime,
-                                }
-                            ]
-                        }
+                                thumbnail: {
+                                    url: video.thumbnail
+                                },
+                                description: video.status,
+                                url: video.link,
+                                fields: [
+                                    {
+                                        name: "視聴者数",
+                                        value: video.viewers.replace(/\(|\)/g, ''),
+                                    },
+                                    {
+                                        name: "経過時間",
+                                        value: video.showtime,
+                                    }
+                                ]
+                            }
+                        });
                     });
-                });
+                } else {
+                    callback.channel.send(res.data.err);
+                }
             } else {
                 callback.channel.send("おや、BOTの様子がおかしいようだ。");
             }
