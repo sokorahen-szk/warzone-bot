@@ -1,7 +1,64 @@
 {
     "taunt" : {
         "command":      "/taunt <taunt no>",
-        "description":  "AoE2でおなじみの日本語タウントが使用可能です。"
+        "description":  "AoE2でおなじみの日本語タウントが使用可能です。",
+        "details":      [
+                            {
+                                "no": 1,
+                                "voice": "いいよ",
+                                "category": "AoE2"
+                            },
+                            {
+                                "no": 2,
+                                "voice": "いやだね",
+                                "category": "AoE2"
+                            },
+                            {
+                                "no": 3,
+                                "voice": "食べ物をくれ",
+                                "category": "AoE2"
+                            },
+                            {
+                                "no": 4,
+                                "voice": "木をくれ",
+                                "category": "AoE2"
+                            },
+                            {
+                                "no": 5,
+                                "voice": "金をくれ",
+                                "category": "AoE2"
+                            },
+                            {
+                                "no": 6,
+                                "voice": "石をくれ",
+                                "category": "AoE2"
+                            },
+                            {
+                                "no": 7,
+                                "voice": "あ～",
+                                "category": "AoE2"
+                            },
+                            {
+                                "no": 8,
+                                "voice": "万歳！ 敗軍の将のお通りだぜ",
+                                "category": "AoE2"
+                            },
+                            {
+                                "no": 9,
+                                "voice": "オ～",
+                                "category": "AoE2"
+                            },
+                            {
+                                "no": 10,
+                                "voice": "Age１に戻してやるぜ",
+                                "category": "AoE2"
+                            },
+                            {
+                                "no": 11,
+                                "voice": "(笑い)",
+                                "category": "AoE2"
+                            }
+                        ]
     },
     "history" : {
         "command":      "/history <playerName> <gameCount>",

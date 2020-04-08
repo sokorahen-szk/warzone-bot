@@ -104,7 +104,46 @@ module.exports = {
      * 生放送リスト
      */
     live(callback, botClient) {
-        callback.channel.send("準備中・・・");
+
+        httpClient.get(
+            {},
+            process.env.BASE_API_URL + 'live'
+        )
+        .then( res => {
+            if(!res.data.api_err) {
+                res.data.results.forEach( (video, index) => {
+                    callback.channel.send({
+                        embed: {
+                            author: {
+                                name: video.user + ' の配信を見る',
+                                url: video.link,
+                            },
+                            thumbnail: {
+                                url: video.thumbnail
+                            },
+                            description: video.status,
+                            url: video.link,
+                            fields: [
+                                {
+                                    name: "視聴者数",
+                                    value: video.viewers.replace(/\(|\)/g, ''),
+                                },
+                                {
+                                    name: "経過時間",
+                                    value: video.showtime,
+                                }
+                            ]
+                        }
+                    });
+                });
+            } else {
+                callback.channel.send("おや、BOTの様子がおかしいようだ。");
+            }
+        })
+        .catch( err => {
+            notifiyAlertClient.post({content: err});
+        });
+
         return;
     },
 
