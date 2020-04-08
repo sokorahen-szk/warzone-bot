@@ -106,13 +106,15 @@ module.exports = {
     live(callback, botClient) {
 
         httpClient.get(
-            {},
+            {
+                category: ''
+            },
             process.env.BASE_API_URL + 'live'
         )
         .then( res => {
             if(!res.data.api_err) {
                 if(0 < res.data.results.length) {
-                    res.data.results.forEach( (video, index) => {
+                    res.data.results.forEach( video => {
                         callback.channel.send({
                             embed: {
                                 author: {
