@@ -1,0 +1,18 @@
+{
+    "taunt" : {
+        "command":      "/taunt <taunt no>",
+        "description":  "AoE2でおなじみの日本語タウントが使用可能です。"
+    },
+    "history" : {
+        "command":      "/history <playerName> <gameCount>",
+        "description":  "個人の勝利数、敗北数、勝率を見ることができます。"
+    },
+    "live" : {
+        "command":      "/live",
+        "description":  "現在放送中のAoE関係の動画のリストを表示します。"
+    },
+    "help" : {
+        "command":      "/help",
+        "description":  "使用できるコマンドの詳細情報を確認できます。"
+    }
+}
