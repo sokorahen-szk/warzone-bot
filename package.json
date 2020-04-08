@@ -1,12 +1,9 @@
 {
   "name": "warzone-bot",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.1.0",
     "@firebase/app": "^0.6.1",
@@ -23,5 +20,7 @@
     "moment-timezone": "^0.5.28",
     "opusscript": "0.0.7"
   },
-  "devDependencies": {}
+  "engines": {
+    "node": "12.x"
+  }
 }
