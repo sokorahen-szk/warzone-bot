@@ -1,5 +1,6 @@
 const httpClient = require("./httpClient.js");
 const notifiyAlertClient = require("./httpClient.js");
+const commandParser = require("./commandParser.js");
 const commandConfig = require("../config/commandConfig.json");
 const path = require("path");
 const agh = require('agh.sprintf');
@@ -12,15 +13,13 @@ notifiyAlertClient.initialize(
 
 module.exports = {
     parser(command, callback, botClient) {
-        let action;
-        if(command.indexOf(' ') !== -1) {
-            action = command.match(/^\/([a-zA-Z]+)\s?([a-zA-Z0-9\s_-]+)+?/);
-        } else {
-            action = command.match(/^\/([a-zA-Z^\s]+)/);
-        }
-
+        let action = commandParser.parse(command);
+        console.log(action);
+        return null;
         try {
-            if(!action) return null;
+            if(!action) {
+                return null;
+            }
             if(action.length == 3) this[action[1]](callback, botClient, action[2].split(' '));
             if(action.length == 2) this[action[1]](callback, botClient);
         } catch (e) {
