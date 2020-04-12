@@ -13,15 +13,19 @@ notifiyAlertClient.initialize(
 
 module.exports = {
     parser(command, callback, botClient) {
-        let action = commandParser.parse(command);
-        console.log(action);
-        return null;
+        let action;
+
         try {
-            if(!action) {
+
+            action = commandParser.parse(command);
+
+            // エラーがある場合
+            if(action.fails) {
+                callback.channel.send(action.errors.join('\n'));
                 return null;
             }
-            if(action.length == 3) this[action[1]](callback, botClient, action[2].split(' '));
-            if(action.length == 2) this[action[1]](callback, botClient);
+
+            this[action.cmd](callback, botClient, action.options);
         } catch (e) {
             throw e;
         }
@@ -30,16 +34,10 @@ module.exports = {
     /*
      * 試合数から勝率データを表示する
      */
-    history(callback, botClient, options = []) {
+    history(callback, botClient, options) {
 
-        let player = typeof options[0] != 'undefined' ? options[0].toLowerCase() : '';
-        let limit = typeof options[1] != 'undefined' ? Number(options[1]) : 10;
-
-        //バリデーション入れるまで　バグ回避用にへんてこコードを追加しとくぜ！
-        if( !Number.isInteger(limit) || limit < 1 || player.length < 2) {
-            callback.channel.send("フォーマットが正しくありません\n例：　/history <プレイヤー名> <試合数>　");
-            return;
-        }
+        let player = options.player.toLowerCase();
+        let limit = Number(options.gameCount);
 
         httpClient.get(
             {
@@ -70,13 +68,7 @@ module.exports = {
      * タウントを鳴らす
      */
     taunt(callback, botClient, options = []) {
-        let tauntNo = typeof options[0] != 'undefined' ? Number(options[0]) : null;
-
-        //バリデーション入れるまで　バグ回避用にへんてこコードを追加しとくぜ！
-        if( !Number.isInteger(tauntNo) || tauntNo === null || tauntNo < 1 || 11 < tauntNo || tauntNo != 100) {
-            callback.channel.send("フォーマットが正しくありません\n例：　/taunt <タウント番号 範囲 1 - 11>　");
-            return;
-        }
+        let tauntNo = Number(options.tauntNo);
 
         callback.member.voice.channel.join()
         .then( connection => {

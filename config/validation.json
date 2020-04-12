@@ -1,0 +1,40 @@
+{
+    "history": {
+        "option": 2,
+        "default"     : {
+            "gameCount":    20
+        },
+        "order": ["player", "gameCount"],
+        "rules": [
+            {"player": "min:2|max:30"},
+            {"gameCount": "numeric"}
+        ],
+        "errors": {
+            "player": "プレイヤー名が正しくありません。",
+            "gameCount": "試合数が正しくありません。"
+        }
+    },
+    "taunt": {
+        "option": 1,
+        "default": {},
+        "order": ["tauntNo"],
+        "rules": [
+            {"tauntNo": ["required", "regex:/^([1-9]|[1][0-1]|100)$/"]}
+        ],
+        "errors": {
+            "tauntNo": "タウント番号が正しくありません。\n範囲：1 ~ 11 , 100"
+        }
+    },
+    "help": {
+        "option": 0,
+        "default": {},
+        "rules": [],
+        "errors": {}
+    },
+    "live": {
+        "option": 0,
+        "default": {},
+        "rules": [],
+        "errors": {}
+    }
+}
