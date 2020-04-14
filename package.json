@@ -12,13 +12,15 @@
     "axios": "^0.19.2",
     "discord.js": "^12.1.1",
     "dotenv": "^8.2.0",
-    "ffmpeg-static": "^4.1.0",
-    "firebase": "^7.13.2",
+    "ffmpeg-static": "^4.1.1",
+    "firebase": "^7.14.0",
     "firebase-admin": "^8.10.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28",
+    "node-cron": "^2.0.3",
     "opusscript": "0.0.7",
+    "unzip": "^0.1.11",
     "validatorjs": "^3.18.1"
   },
   "engines": {

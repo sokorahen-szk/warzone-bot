@@ -7,6 +7,8 @@ const httpClient = require("./modules/httpClient.js");
 require("firebase/database");
 require('dotenv').config();
 
+require("./cron/cron.js");
+
 /* エラー時の通知先 */
 httpClient.initialize(
     `${process.env.NOTIFICATION_POST_WEBHOOK_URL}${process.env.NOTIFICATION_POST_WEBHOOK_KEY}`
