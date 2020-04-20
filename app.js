@@ -1,10 +1,11 @@
 const Discord = require("discord.js");
 const firebase = require("firebase/app");
+require('firebase/auth');
+require('firebase/database');
 
 const commandAction = require("./modules/commandAction.js");
 const httpClient = require("./modules/httpClient.js");
 
-require("firebase/database");
 require('dotenv').config();
 
 //require("./cron/cron.js");
