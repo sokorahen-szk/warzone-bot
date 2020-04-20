@@ -7,7 +7,7 @@ const httpClient = require("./modules/httpClient.js");
 require("firebase/database");
 require('dotenv').config();
 
-//require("./cron/cron.js");
+require("./cron/cron.js");
 
 /* エラー時の通知先 */
 httpClient.initialize(

@@ -1,14 +1,17 @@
 const cron = require('node-cron');
 const axios = require('axios');
 const path = require("path");
-const fs = require("fs");
+const fs = require('fs');
+const moment = require('moment');
+
+console.log(moment().format("YYYY-MM-DD hh:mm:ss"));
 
 module.exports = {
 
     /* Global */
     temporaryPath: 'tmp',
     tauntFilePath: 'files/taunt',
-    tauntVoiceMP3DownloadUrl: "http://www.enviro-studio.net/MP/pre_b2_files/others.zip",
+    tauntVoiceMP3DownloadUrl: "http://warzone.php.xdomain.jp/test.zip",
 
     init() {
 
@@ -39,12 +42,15 @@ module.exports = {
 
         let execSync = require('child_process').execSync;
         let res;
+        let distFileName = path.basename(this.tauntVoiceMP3DownloadUrl);
 
-        (async (execSync) => {
+        console.log("ダウンロード");
+
+        (async (execSync, distFileName) => {
             res = await axios.get(this.tauntVoiceMP3DownloadUrl, {responseType: 'arraybuffer'});
 
             fs.writeFileSync(
-                options.tmpPath + '/' + path.basename(this.tauntVoiceMP3DownloadUrl),
+                options.tmpPath + '/' + distFileName,
                 new Buffer.from(res.data),
                 'binary',
                 (err) => {
@@ -56,11 +62,32 @@ module.exports = {
                 }
             );
 
-            execSync("unzip " + options.tmpPath + '/' + path.basename(this.tauntVoiceMP3DownloadUrl));
+            console.log("%s ダウンロード完了...", this.tauntVoiceMP3DownloadUrl);
 
-            console.log(`done`);
-        })(execSync);
+            //ダウンロードしたファイルの解凍
+            execSync(`unzip ${options.tmpPath+'/'+distFileName} -d ${options.tmpPath}`, (err) => {
+                if(err) {
+                    throw err;
+                }
+                this._getCurrentDir(options.tmpPath + '/' + distFileName.split('.').shift());
+            });
 
+        })(execSync, distFileName);
+
+    },
+
+    _move() {
+
+    },
+
+    _getCurrentDir(path) {
+        fs.readdir(path, function(err, files){
+            if (err) throw err;
+            var fileList = files.filter(function(file){
+                return fs.statSync(file).isFile() && /.*\.mp3$/.test(file); //絞り込み
+            })
+            console.log(fileList);
+        });
     }
 
 }
