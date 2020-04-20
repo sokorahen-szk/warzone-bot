@@ -49,7 +49,7 @@ module.exports = {
             process.env.BASE_API_URL + 'recent_win_ratio'
         )
         .then (res => {
-            if(!res.data.api_err) {
+            if(res.data.err == '') {
                 callback.channel.send(
                     res.data.err == '' ? `${res.data.name} さんの直近 ${res.data.recent} 戦分のデータ\n勝利：${res.data.win}　敗北：${res.data.lost}　勝率：${res.data.win_ratio}%` : `${res.data.err}`
                 );
