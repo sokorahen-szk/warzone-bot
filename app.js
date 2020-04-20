@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const firebase = require("firebase/app");
+const firebase = require("firebase");
 require('firebase/auth');
 require('firebase/database');
 
