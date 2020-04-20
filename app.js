@@ -1,7 +1,4 @@
 const Discord = require("discord.js");
-const firebase = require("firebase");
-require('firebase/auth');
-require('firebase/database');
 
 const commandAction = require("./modules/commandAction.js");
 const httpClient = require("./modules/httpClient.js");
@@ -16,11 +13,13 @@ httpClient.initialize(
 );
 
 /* Firebaseの設定 */
+/*
 firebase.initializeApp(require("./config/firebase.json"));
-
-const discordClient = new Discord.Client();
 const db = firebase.database();
 const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
+*/
+
+const discordClient = new Discord.Client();
 
 ( _this => {
 
@@ -28,12 +27,6 @@ const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
 
     /* 起動時の処理 */
     _this.on("ready", () => {
-        discordConfig = ref.once("value").then( res => {
-            return res.val();
-        })
-        .catch( err => {
-            httpClient.post({content: err});
-        });
     });
 
     /*
@@ -60,6 +53,7 @@ const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
         let dC = member.guild.channels.cache.find(ch => ch.name == process.env.GUIDELINE_CHANNEL_NAME);
 
         if (dC) {
+            /*
             discordConfig.then( res => {
                 dC.send(
                     `<@${member.user.id}>\n` +
@@ -71,6 +65,7 @@ const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
             .catch( err => {
                 httpClient.post({content: err});
             })
+            */
         }
 
         return;
