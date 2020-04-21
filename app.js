@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-
 const commandAction = require("./modules/commandAction.js");
 const httpClient = require("./modules/httpClient.js");
 
@@ -11,13 +10,6 @@ require('dotenv').config();
 httpClient.initialize(
     `${process.env.NOTIFICATION_POST_WEBHOOK_URL}${process.env.NOTIFICATION_POST_WEBHOOK_KEY}`
 );
-
-/* Firebaseの設定 */
-/*
-firebase.initializeApp(require("./config/firebase.json"));
-const db = firebase.database();
-const ref = db.ref(process.env.FIREBASE_OBJECT_KEY);
-*/
 
 const discordClient = new Discord.Client();
 
