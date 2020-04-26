@@ -28,15 +28,17 @@
         }
     },
     "vote": {
-        "option": 1,
-        "requireOption": 1,
+        "option": 2,
+        "requireOption": 2,
         "default": {},
-        "order": ["player"],
+        "order": ["player", "times"],
         "rules": [
-            {"player": "min:2|max:30"}
+            {"player": "min:2|max:30"},
+            {"times": ["required", "regex:/^[0-9]{1,}(s|m|h|d)$/"]}
         ],
         "errors": {
-            "player": "プレイヤー名が正しくありません。"
+            "player": "プレイヤー名が正しくありません。",
+            "times": "投票の締め切り時間が正しく指定されていません。\n投票のヘルプを参照ください /help"
         }
     },
     "help": {

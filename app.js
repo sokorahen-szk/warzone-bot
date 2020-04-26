@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const commandAction = require("./modules/commandAction.js");
 const httpClient = require("./modules/httpClient.js");
-
+const date = require("./modules/date.js");
 require('dotenv').config();
 
 //require("./cron/cron.js");
@@ -25,7 +25,7 @@ let store = {
             voteMemory: {
                 voters: <投票者>                    String
                 status: <投票番号>                  Number
-                action: < add | sub >              Enum
+                count: < 1 or -1 >                Number
                 createdAt: <投票時間>               Date
             }
         */
@@ -50,7 +50,7 @@ const discordClient = new Discord.Client();
 
         if(_this.checkBot(message)) return;
         try {
-            commandAction.parser(message.content, message, this);
+            commandAction.parser(message.content, message, store, this);
         } catch(err) {
             httpClient.post({content: err});
         }
@@ -84,14 +84,34 @@ const discordClient = new Discord.Client();
         return;
     });
 
-    /* リアクション時の処理 */
+    /* リアクション追加 */
     _this.on('messageReactionAdd', async (reaction, user) => {
         if(botList.find( item => item != `${user.id}`)) {
-            store.date.push(new Date())
-            console.log(reaction.message.channel.lastMessageID)
-            console.log(reaction._emoji.name)
-            console.log(reaction.count)
-            console.log(store)
+            if(store.votes[`${reaction.message.channel.lastMessageID}`]) {
+                store.votes[`${reaction.message.channel.lastMessageID}`].voteMemory.push({
+                    voters: user.username,
+                    voterId: user.id,
+                    status: reaction._emoji.name,
+                    count:  1,
+                    createdAt: date.now("YYYY-MM-DD HH:mm:ss")
+                });
+            }
+            console.log(store.votes[`${reaction.message.channel.lastMessageID}`]);
+        }
+    })
+    /* リアクション削除 */
+    _this.on('messageReactionRemove', async (reaction, user) => {
+        if(botList.find( item => item != `${user.id}`)) {
+            if(store.votes[`${reaction.message.channel.lastMessageID}`]) {
+                store.votes[`${reaction.message.channel.lastMessageID}`].voteMemory.push({
+                    voters: user.username,
+                    voterId: user.id,
+                    status: reaction._emoji.name,
+                    count:  -1,
+                    createdAt: date.now("YYYY-MM-DD HH:mm:ss")
+                });
+            }
+            console.log(store.votes[`${reaction.message.channel.lastMessageID}`]);
         }
     })
 

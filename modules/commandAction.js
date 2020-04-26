@@ -2,6 +2,7 @@ const httpClient = require("./httpClient.js");
 const notifiyAlertClient = require("./httpClient.js");
 const commandParser = require("./commandParser.js");
 const commandConfig = require("../config/commandConfig.json");
+const date = require("./date.js");
 const path = require("path");
 const agh = require('agh.sprintf');
 require('dotenv').config();
@@ -12,7 +13,7 @@ notifiyAlertClient.initialize(
 );
 
 module.exports = {
-    parser(command, callback, botClient) {
+    parser(command, callback, store, botClient) {
         let action;
 
         try {
@@ -25,7 +26,7 @@ module.exports = {
                 return null;
             }
 
-            this[action.cmd](callback, botClient, action.options);
+            this[action.cmd](callback, botClient, action.options, store);
         } catch (e) {
             throw e;
         }
@@ -162,17 +163,33 @@ module.exports = {
     /*
      * 投票
      */
-    async vote(callback, botClient, options = {}) {
+    async vote(callback, botClient, options = {}, store) {
 
+        let seconds = date.convertToSeconds(options.times);
 
         //投票開始
         callback.channel.send('a').then( async (res) => {
             await res.react('1️⃣');   //下方修正希望
             await res.react('2️⃣');   //現状維持
             await res.react('3️⃣');   //上方修正希望
-            const messageId = res.channel.lastMessageID;
-            console.log(messageId)
+
+            // Storeにキャッシュ
+            store.votes[`${callback.channel.lastMessageID}`] = {
+                "author": callback.author.username,
+                "authorId": callback.author.id,
+                "beginDate": date.now("YYYY-MM-DD HH:mm:ss"),
+                "endDate": date.now().add(seconds, "seconds").format("YYYY-MM-DD"),
+                "voteMemory": []
+            };
+
         });
+    },
+
+    /*
+     * 投票　取り消し
+     */
+    async voterm(callback, botClient, options = {}, store) {
+        //取り消し処理
     }
 
 }
