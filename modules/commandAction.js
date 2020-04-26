@@ -166,11 +166,12 @@ module.exports = {
     async vote(callback, botClient, options = {}, store) {
 
         let seconds = date.convertToSeconds(options.times);
-
         let voteId = callback.channel.lastMessageID;
+        let endDate = date.now().add(seconds, "seconds").format("YYYY-MM-DD HH:mm:ss");
 
         //投票開始
-        callback.channel.send(`投票ID:${voteId} を開始しました。`).then( async (res) => {
+        callback.channel.send(`投票ID:${voteId} を開始しました。\n対象者は、${options.player} さんです。\n投票締め切りは、${endDate}\n1️⃣ = 下方修正必要\n2️⃣ = 現状維持\n3️⃣ = 上方修正必要`).then( async (res) => {
+
             await res.react('1️⃣');   //下方修正希望
             await res.react('2️⃣');   //現状維持
             await res.react('3️⃣');   //上方修正希望
@@ -180,7 +181,7 @@ module.exports = {
                 "author": callback.author.username,
                 "authorId": callback.author.id,
                 "beginDate": date.now("YYYY-MM-DD HH:mm:ss"),
-                "endDate": date.now().add(seconds, "seconds").format("YYYY-MM-DD"),
+                "endDate": endDate,
                 "voteMemory": []
             };
 
@@ -193,11 +194,14 @@ module.exports = {
      * 投票　取り消し
      */
     voteremove(callback, botClient, options = {}, store) {
-        //取り消し処理
 
+        //取り消し処理
         if(store.votes[`${options.voteId}`]) {
+
+            //投票を作った人しか、投票の取り消しはできない
             if(callback.author.id == store.votes[`${options.voteId}`].authorId) {
 
+                // 投票のデータ削除
                 delete store.votes[`${options.voteId}`];
 
                 if(!store.votes[`${options.voteId}`]) {

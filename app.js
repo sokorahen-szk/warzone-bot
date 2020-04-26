@@ -96,8 +96,6 @@ const discordClient = new Discord.Client();
                     createdAt: date.now("YYYY-MM-DD HH:mm:ss")
                 });
             }
-            console.log({lastMessageID: reaction.message.channel.lastMessageID})
-            console.log(store.votes[`${reaction.message.channel.lastMessageID}`]);
         }
     })
     /* リアクション削除 */
@@ -112,8 +110,6 @@ const discordClient = new Discord.Client();
                     createdAt: date.now("YYYY-MM-DD HH:mm:ss")
                 });
             }
-            console.log({lastMessageID: reaction.message.channel.lastMessageID})
-            console.log(store.votes[`${reaction.message.channel.lastMessageID}`]);
         }
     })
 
