@@ -167,14 +167,16 @@ module.exports = {
 
         let seconds = date.convertToSeconds(options.times);
 
+        let voteId = callback.channel.lastMessageID;
+
         //投票開始
-        callback.channel.send('a').then( async (res) => {
+        callback.channel.send(`投票ID:${voteId} を開始しました。`).then( async (res) => {
             await res.react('1️⃣');   //下方修正希望
             await res.react('2️⃣');   //現状維持
             await res.react('3️⃣');   //上方修正希望
 
             // Storeにキャッシュ
-            store.votes[`${callback.channel.lastMessageID}`] = {
+            store.votes[`${voteId}`] = {
                 "author": callback.author.username,
                 "authorId": callback.author.id,
                 "beginDate": date.now("YYYY-MM-DD HH:mm:ss"),
@@ -183,13 +185,32 @@ module.exports = {
             };
 
         });
+
+        return;
     },
 
     /*
      * 投票　取り消し
      */
-    async voterm(callback, botClient, options = {}, store) {
+    voteremove(callback, botClient, options = {}, store) {
         //取り消し処理
+
+        if(store.votes[`${options.voteId}`]) {
+            if(callback.author.id == store.votes[`${options.voteId}`].authorId) {
+
+                delete store.votes[`${options.voteId}`];
+
+                if(!store.votes[`${options.voteId}`]) {
+                    callback.channel.send(`投票ID:${options.voteId} の投票を取り消しました。`);
+                } else {
+                    callback.channel.send(`投票ID:${options.voteId} の投票を取り消せませんでした。`);
+                }
+            }
+        } else {
+            callback.channel.send(`投票ID:${options.voteId} は存在しない投票IDです。`);
+        }
+
+        return;
     }
 
 }

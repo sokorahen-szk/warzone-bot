@@ -41,6 +41,18 @@
             "times": "投票の締め切り時間が正しく指定されていません。\n投票のヘルプを参照ください /help"
         }
     },
+    "voteremove": {
+        "option": 1,
+        "requireOption": 1,
+        "default": {},
+        "order": ["voteId"],
+        "rules": [
+            {"voteId": ["required", "regex:/^[0-9]+$/"]}
+        ],
+        "errors": {
+            "voteId": "投票番号が正しくありません。"
+        }
+    },
     "help": {
         "option": 0,
         "default": {},
