@@ -57,11 +57,7 @@ module.exports = {
             return result;
         }
 
-        if(
-            !(0 <= commands.options.length)
-            &&
-            !(commands.options.length <= validation[commands.cmd].option)
-        ) {
+        if(commands.options.length < validation[commands.cmd].requireOption) {
             result.errors.push("オプションが足りません。");
             result.fails = true;
             return result;

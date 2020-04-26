@@ -157,6 +157,22 @@ module.exports = {
         callback.channel.send(commandList.join(''));
 
         return;
+    },
+
+    /*
+     * 投票
+     */
+    async vote(callback, botClient, options = {}) {
+
+
+        //投票開始
+        callback.channel.send('a').then( async (res) => {
+            await res.react('1️⃣');   //下方修正希望
+            await res.react('2️⃣');   //現状維持
+            await res.react('3️⃣');   //上方修正希望
+            const messageId = res.channel.lastMessageID;
+            console.log(messageId)
+        });
     }
 
 }

@@ -1,6 +1,7 @@
 {
     "history": {
         "option": 2,
+        "requireOption": 1,
         "default"     : {
             "gameCount":    20
         },
@@ -16,6 +17,7 @@
     },
     "taunt": {
         "option": 1,
+        "requireOption": 1,
         "default": {},
         "order": ["tauntNo"],
         "rules": [
@@ -23,6 +25,18 @@
         ],
         "errors": {
             "tauntNo": "タウント番号が正しくありません。\n範囲：1 ~ 11 , 100"
+        }
+    },
+    "vote": {
+        "option": 1,
+        "requireOption": 1,
+        "default": {},
+        "order": ["player"],
+        "rules": [
+            {"player": "min:2|max:30"}
+        ],
+        "errors": {
+            "player": "プレイヤー名が正しくありません。"
         }
     },
     "help": {

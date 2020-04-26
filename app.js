@@ -11,6 +11,27 @@ httpClient.initialize(
     `${process.env.NOTIFICATION_POST_WEBHOOK_URL}${process.env.NOTIFICATION_POST_WEBHOOK_KEY}`
 );
 
+// BOTのIDをリスト化
+const botList = ["695273363123208373"];
+
+// 保存されるキャッシュ情報
+let store = {
+    votes: [
+        /*
+            id: message.channel.lastMessageID      String
+            author: <voteを開始した人>               String
+            beginDate: <投票開始日時>                Date
+            endDate: <投票終了日時>                  Date
+            voteMemory: {
+                voters: <投票者>                    String
+                status: <投票番号>                  Number
+                action: < add | sub >              Enum
+                createdAt: <投票時間>               Date
+            }
+        */
+    ]
+};
+
 const discordClient = new Discord.Client();
 
 ( _this => {
@@ -62,6 +83,17 @@ const discordClient = new Discord.Client();
 
         return;
     });
+
+    /* リアクション時の処理 */
+    _this.on('messageReactionAdd', async (reaction, user) => {
+        if(botList.find( item => item != `${user.id}`)) {
+            store.date.push(new Date())
+            console.log(reaction.message.channel.lastMessageID)
+            console.log(reaction._emoji.name)
+            console.log(reaction.count)
+            console.log(store)
+        }
+    })
 
     /* 切断 */
     _this.on('disconnect', () => {
