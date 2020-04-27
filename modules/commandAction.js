@@ -193,12 +193,13 @@ module.exports = {
     /*
      * 投票　取り消し
      */
-    voteremove(callback, botClient, options = {}, store) {
+    async voteremove(callback, botClient, options = {}, store) {
 
         //取り消し処理
         if(store.votes[`${options.voteId}`]) {
 
-            //投票を作った人しか、投票の取り消しはできない
+            // 投票を作った人しか、投票の取り消しはできない
+            // 近い将来、Discordのロールでも取り消せるようにする
             if(callback.author.id == store.votes[`${options.voteId}`].authorId) {
 
                 // 投票のデータ削除
