@@ -15,7 +15,7 @@ module.exports = {
             options: []
         }
 
-        // コマンド出ない場合は Null
+        // コマンドではない場合は Null
         if(! this.isCommandCheck(command)) return null;
 
         if(command.match(/^\/([a-zA-Z]+)$/)) {

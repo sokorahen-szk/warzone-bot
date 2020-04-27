@@ -20,8 +20,11 @@ module.exports = {
 
             action = commandParser.parse(command);
 
+            //／コマンドではない場合
+            if(action==null) return null;
+
             // エラーがある場合
-            if(action.fails) {
+            if(action['fails']) {
                 callback.channel.send(action.errors.join('\n'));
                 return null;
             }
@@ -169,12 +172,15 @@ module.exports = {
         let voteId = callback.channel.lastMessageID;
         let endDate = date.now().add(seconds, "seconds").format("YYYY-MM-DD HH:mm:ss");
 
+        // リアクション格納
+        let reactions = [];
+
         //投票開始
         callback.channel.send(`投票ID:${voteId} を開始しました。\n対象者は、${options.player} さんです。\n投票締め切りは、${endDate}\n1️⃣ = 下方修正必要\n2️⃣ = 現状維持\n3️⃣ = 上方修正必要`).then( async (res) => {
 
-            await res.react('1️⃣');   //下方修正希望
-            await res.react('2️⃣');   //現状維持
-            await res.react('3️⃣');   //上方修正希望
+            reactions.push(await res.react('1️⃣'));   //下方修正希望
+            reactions.push(await res.react('2️⃣'));   //現状維持
+            reactions.push(await res.react('3️⃣'));   //上方修正希望
 
             // Storeにキャッシュ
             store.votes[`${voteId}`] = {
@@ -182,6 +188,10 @@ module.exports = {
                 "authorId": callback.author.id,
                 "beginDate": date.now("YYYY-MM-DD HH:mm:ss"),
                 "endDate": endDate,
+                "callback": {
+                    "reactions": reactions,
+                    "this": res
+                },
                 "voteMemory": []
             };
 
@@ -201,6 +211,14 @@ module.exports = {
             // 投票を作った人しか、投票の取り消しはできない
             // 近い将来、Discordのロールでも取り消せるようにする
             if(callback.author.id == store.votes[`${options.voteId}`].authorId) {
+
+                // リアクション削除
+                store.votes[`${options.voteId}`]["callback"]["reactions"].forEach( reaction => {
+                    reaction.remove();
+                });
+
+                // 取り消しメッセージを表示する
+                store.votes[`${options.voteId}`]["callback"]["this"].edit("投票を取り消しました。");
 
                 // 投票のデータ削除
                 delete store.votes[`${options.voteId}`];
