@@ -28,16 +28,18 @@
         }
     },
     "vote": {
-        "option": 2,
-        "requireOption": 2,
+        "option": 3,
+        "requireOption": 3,
         "default": {},
-        "order": ["player", "times"],
+        "order": ["player", "setRate", "times"],
         "rules": [
             {"player": "min:2|max:30"},
+            {"setRate": ["required", "regex:/^[0-9]{1,6}$/"]},
             {"times": ["required", "regex:/^[0-9]{1,}(s|m|h|d)$/"]}
         ],
         "errors": {
             "player": "プレイヤー名が正しくありません。",
+            "setRate": "セットされたレートの値が正常ではありません。",
             "times": "投票の締め切り時間が正しく指定されていません。\n投票のヘルプを参照ください /help"
         }
     },
