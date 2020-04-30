@@ -1,8 +1,8 @@
 const Discord = require("discord.js");
-const firebase = require("firebase");
-require("firebase/firestore");
+
 const commandAction = require("./modules/commandAction.js");
 const httpClient = require("./modules/httpClient.js");
+const fireStore = require("./modules/firestore.js");
 const date = require("./modules/date.js");
 require('dotenv').config();
 
@@ -34,23 +34,26 @@ let store = {
     ]
 };
 
-/* Firebase */
-const firebaseConfig = {
-    apiKey: `${process.env.FIREBASE_API_KEY}`,
-    authDomain: `${process.env.FIREBASE_AUTH_DOMAIN}`,
-    databaseURL: `${process.env.FIREBASE_DATABASE_URL}`,
-    projectId: `${process.env.FIREBASE_PROJECT_ID}`,
-    storageBucket: `${process.env.FIREBASE_STORAGE_BUCKET}`,
-    messagingSenderId: `${process.env.FIREBASE_MESSAGING_SENDER_ID}`,
-    appId: `${process.env.FIREBASE_APPID}`,
-    measurementId: `${process.env.FIREBASE_MEASUREMENT_ID}`
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
 /* Discord Client */
 const discordClient = new Discord.Client();
+
+fireStore.setVote(112,
+{
+    id: 112,
+    author: "nagisa",
+    authorId: 1,
+    beginDate: "2020/04/30 00:00:00",
+    endDate: "2020/04/30 00:00:00",
+    player: {
+        id: 2,
+        name: "titan",
+        beforeRate: 1000,
+        afterRate: 1300
+    },
+    agreeCount: 10,
+    opposition: 5
+}, '-'
+);
 
 ( _this => {
 

@@ -168,7 +168,6 @@ module.exports = {
      */
     async vote(callback, botClient, options = {}, store) {
 
-
         let voteChannel = callback.guild.channels.cache.find( channel => channel.name == "vote")
 
         let seconds = date.convertToSeconds(options.times);
@@ -186,12 +185,14 @@ module.exports = {
         // リアクション格納
         let reactions = [];
 
+        callback.channel.send(`${player.name} さんの投票リクエストが提出されました。\n投票ID：${voteId}`);
+
         //投票開始
-        voteChannel.send(`投票リクエスト\n\`\`\`対象者： ${player.name}さん\n\n変更前：${player.rateBefore} →　変更後：${player.rateAfter}\n投票期間：${startDate} 〜 ${endDate}\`\`\`\n1️⃣-\`下方修正必要\`\n2️⃣-\`現状維持\`\n3️⃣-\`上方修正必要\``)
+        voteChannel.send(`投票リクエスト\n\`\`\`対象者： ${player.name}さん\n\n変更前：${player.rateBefore} →　変更後：${player.rateAfter}\n投票期間：${startDate} 〜 ${endDate}\`\`\`\n1️⃣-\`賛成\`\n2️⃣-\`現状維持\`\n3️⃣-\`反対\``)
         .then( async (res) => {
-            reactions.push(await res.react('1️⃣'));   //下方修正希望
+            reactions.push(await res.react('1️⃣'));   //賛成
             reactions.push(await res.react('2️⃣'));   //現状維持
-            reactions.push(await res.react('3️⃣'));   //上方修正希望
+            reactions.push(await res.react('3️⃣'));   //反対
 
             // Storeにキャッシュ
             store.votes[`${voteId}`] = {
