@@ -1,5 +1,5 @@
 const moment = require("moment-timezone");
-const timezone = moment.tz(moment(), "Asia/Tokyo");
+const timezone = moment.tz("Asia/Tokyo");
 
 module.exports = {
   now(format) {

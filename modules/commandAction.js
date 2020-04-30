@@ -170,9 +170,7 @@ module.exports = {
     async vote(callback, botClient, options = {}, store) {
 
         let voteChannel = callback.guild.channels.cache.find( channel => channel.name == "vote")
-
         let seconds = date.convertToSeconds(options.times);
-        let voteId = callback.channel.lastMessageID;
         let startDate = date.now("YYYY-MM-DD HH:mm:ss");
         let endDate = date.now().add(seconds, "seconds").format("YYYY-MM-DD HH:mm:ss");
 
@@ -180,21 +178,26 @@ module.exports = {
         let player = {
             "id"   : 2,
             "name" : `${options.player}`,
-            "rateBefore": 1000, //ここは可変
-            "rateAfter": options.setRate
+            "beforeRate": 1000, //ここは可変
+            "afterRate": options.setRate
         };
 
         // リアクション格納
         let reactions = [];
 
-        callback.channel.send(`${player.name} さんの投票リクエストが提出されました。\n投票ID：${voteId}`);
-
         //投票開始
-        voteChannel.send(`投票リクエスト\n\`\`\`対象者： ${player.name}さん\n\n変更前：${player.rateBefore} →　変更後：${player.rateAfter}\n投票期間：${startDate} 〜 ${endDate}\`\`\`\n1️⃣-\`賛成\`\n2️⃣-\`現状維持\`\n3️⃣-\`反対\``)
+        voteChannel.send(`投票リクエスト\n\`\`\`対象者： ${player.name}さん\n\n変更前：${player.beforeRate} →　変更後：${player.afterRate}\n投票期間：${startDate} 〜 ${endDate}\`\`\`\n1️⃣-\`賛成\`\n2️⃣-\`現状維持\`\n3️⃣-\`反対\``)
         .then( async (res) => {
+
+            let voteId = res.createdTimestamp;
+
+            callback.channel.send(`${player.name} さんの投票リクエストが提出されました。\n投票ID：${voteId}`);
+
             reactions.push(await res.react('1️⃣'));   //賛成
             reactions.push(await res.react('2️⃣'));   //現状維持
             reactions.push(await res.react('3️⃣'));   //反対
+
+            console.log(res)
 
             // Storeにキャッシュ
             store.votes[`${voteId}`] = {
@@ -206,8 +209,7 @@ module.exports = {
                 "callback": {
                     "reactions": reactions,
                     "this": res
-                },
-                "voteMemory": []
+                }
             };
 
             fireStore.setVote(voteId, {

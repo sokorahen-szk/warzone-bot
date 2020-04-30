@@ -1,7 +1,9 @@
 const firebase = require("firebase");
+const date = require("./date.js");
 
 require('dotenv').config();
 require("firebase/firestore");
+
 
 /* Firebase */
 const firebaseConfig = {
@@ -41,7 +43,6 @@ module.exports = {
     result.then( res => {
 
       let objName = Object.keys(res)[0];
-      let updateObject = {};
       // データがFireStoreにない時
       if(typeof objName == "undefined") {
         db.collection("votes").add({
@@ -61,27 +62,48 @@ module.exports = {
           opposition: voteItem.opposition,
           keep: voteItem.keep
         });
+      }
+    });
+  },
+  updateVote(id, action, value, history) {
+    let result = this.getVote(id).then( item => {
+      return item;
+    });
+
+    result.then( res => {
+      let objName = Object.keys(res)[0];
+      let updateObject = {};
 
       // データがFireStoreにある時
-      } else if(objName) {
-
+      if(typeof objName != "undefined") {
         if(action == '+') {
           updateObject = {
-            agreeCount: ++res[objName].agreeCount
+            agreeCount: value
           };
         } else if(action == '-') {
           updateObject = {
-            agreeCount: ++res[objName].opposition
+            opposition: value
           };
         } else {
           updateObject = {
-            keep: ++res[objName].keep
+            keep: value
           };
         }
+        console.log(date.now("YYYY-MM-DD HH:mm:ss"))
+        //有期間内だけ
+        if(
+          res[objName].beginDate <= date.now("YYYY-MM-DD HH:mm:ss")
+          && date.now("YYYY-MM-DD HH:mm:ss") <= res[objName].endDate
+        ) {
+          updateObject["voteMemory"] = [...res[objName].voteMemory, history];
+          db.collection("votes").doc(objName).update(updateObject);
+        } else {
+          return false;
+        }
 
-        db.collection("votes").doc(objName).update(updateObject)
-
+        return true;
       }
+
     });
   }
 };

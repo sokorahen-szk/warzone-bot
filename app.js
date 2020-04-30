@@ -18,45 +18,11 @@ const botList = ["695273363123208373"];
 
 // 保存されるキャッシュ情報
 let store = {
-    votes: [
-        /*
-            id: message.channel.lastMessageID      String
-            author: <voteを開始した人>               String
-            beginDate: <投票開始日時>                Date
-            endDate: <投票終了日時>                  Date
-            voteMemory: {
-                voters: <投票者>                    String
-                status: <投票番号>                  Number
-                count: < 1 or -1 >                Number
-                createdAt: <投票時間>               Date
-            }
-        */
-    ]
+    votes: []
 };
 
 /* Discord Client */
 const discordClient = new Discord.Client();
-
-/*
-fireStore.setVote(112,
-{
-    id: 112,
-    author: "nagisa",
-    authorId: 1,
-    beginDate: "2020/04/30 00:00:00",
-    endDate: "2020/04/30 00:00:00",
-    player: {
-        id: 2,
-        name: "titan",
-        beforeRate: 1000,
-        afterRate: 1300
-    },
-    agreeCount: 10,
-    opposition: 5,
-    keep: 0,
-}, '+'
-);
-*/
 
 ( _this => {
 
@@ -110,29 +76,49 @@ fireStore.setVote(112,
 
     /* リアクション追加 */
     _this.on('messageReactionAdd', async (reaction, user) => {
+        let action = null;
+        let result = null;
         if(botList.find( item => item != `${user.id}`)) {
-            if(store.votes[`${reaction.message.channel.lastMessageID}`]) {
-                store.votes[`${reaction.message.channel.lastMessageID}`].voteMemory.push({
-                    voters: user.username,
-                    voterId: user.id,
-                    status: reaction._emoji.name,
-                    count:  1,
-                    createdAt: date.now("YYYY-MM-DD HH:mm:ss")
-                });
+            if(store.votes[`${reaction.message.createdTimestamp}`]) {
+                if('1️⃣' == reaction._emoji.name) action = '+';
+                if('2️⃣' == reaction._emoji.name) action = '=';
+                if('3️⃣' == reaction._emoji.name) action = '-';
+
+                result = fireStore.updateVote(
+                    reaction.message.createdTimestamp,
+                    action,
+                    reaction.count - 1,
+                    {
+                        voters: user.username,
+                        voterId: user.id,
+                        status: action,
+                        createdAt: date.now("YYYY-MM-DD HH:mm:ss")
+                    }
+                );
             }
         }
     })
     /* リアクション削除 */
     _this.on('messageReactionRemove', async (reaction, user) => {
+        let action = null;
+        let result = null;
         if(botList.find( item => item != `${user.id}`)) {
-            if(store.votes[`${reaction.message.channel.lastMessageID}`]) {
-                store.votes[`${reaction.message.channel.lastMessageID}`].voteMemory.push({
-                    voters: user.username,
-                    voterId: user.id,
-                    status: reaction._emoji.name,
-                    count:  -1,
-                    createdAt: date.now("YYYY-MM-DD HH:mm:ss")
-                });
+            if(store.votes[`${reaction.message.createdTimestamp}`]) {
+                if('1️⃣' == reaction._emoji.name) action = '+';
+                if('2️⃣' == reaction._emoji.name) action = '=';
+                if('3️⃣' == reaction._emoji.name) action = '-';
+
+                result = fireStore.updateVote(
+                    reaction.message.createdTimestamp,
+                    action,
+                    reaction.count - 1,
+                    {
+                        voters: user.username,
+                        voterId: user.id,
+                        status: action,
+                        createdAt: date.now("YYYY-MM-DD HH:mm:ss")
+                    }
+                );
             }
         }
     })
