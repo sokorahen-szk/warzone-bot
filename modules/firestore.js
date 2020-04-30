@@ -24,7 +24,6 @@ module.exports = {
       let item = {};
 
       snapShot.forEach((res) => {
-        console.log(res.data());
         if(res.data().id == id) {
           item[res.id] = res.data();
         }
@@ -33,7 +32,7 @@ module.exports = {
       return item;
     });
   },
-  setVote(id, voteItem, action) {
+  setVote(id, voteItem, action = '+') {
 
     let result = this.getVote(id).then( item => {
       return item;
@@ -42,7 +41,7 @@ module.exports = {
     result.then( res => {
 
       let objName = Object.keys(res)[0];
-
+      let updateObject = {};
       // データがFireStoreにない時
       if(typeof objName == "undefined") {
         db.collection("votes").add({
@@ -59,15 +58,29 @@ module.exports = {
           },
           voteMemory: [],
           agreeCount: voteItem.agreeCount,
-          opposition: voteItem.opposition
+          opposition: voteItem.opposition,
+          keep: voteItem.keep
         });
-
-        console.log(voteItem);
 
       // データがFireStoreにある時
       } else if(objName) {
-        voteItem.agreeCount += eval(action + 1);
-        db.collection("votes").doc(objName).update(voteItem);
+
+        if(action == '+') {
+          updateObject = {
+            agreeCount: ++res[objName].agreeCount
+          };
+        } else if(action == '-') {
+          updateObject = {
+            agreeCount: ++res[objName].opposition
+          };
+        } else {
+          updateObject = {
+            keep: ++res[objName].keep
+          };
+        }
+
+        db.collection("votes").doc(objName).update(updateObject)
+
       }
     });
   }

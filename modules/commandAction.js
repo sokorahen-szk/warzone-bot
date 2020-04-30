@@ -1,5 +1,6 @@
 const httpClient = require("./httpClient.js");
 const notifiyAlertClient = require("./httpClient.js");
+const fireStore = require("./firestore.js");
 const commandParser = require("./commandParser.js");
 const commandConfig = require("../config/commandConfig.json");
 const date = require("./date.js");
@@ -177,6 +178,7 @@ module.exports = {
 
         // 対象者
         let player = {
+            "id"   : 2,
             "name" : `${options.player}`,
             "rateBefore": 1000, //ここは可変
             "rateAfter": options.setRate
@@ -207,6 +209,18 @@ module.exports = {
                 },
                 "voteMemory": []
             };
+
+            fireStore.setVote(voteId, {
+                id: voteId,
+                author: callback.author.username,
+                authorId: callback.author.id,
+                beginDate: startDate,
+                endDate: endDate,
+                player: player,
+                agreeCount: 0,
+                opposition: 0,
+                keep: 0,
+            });
 
         });
 

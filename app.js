@@ -37,6 +37,7 @@ let store = {
 /* Discord Client */
 const discordClient = new Discord.Client();
 
+/*
 fireStore.setVote(112,
 {
     id: 112,
@@ -51,9 +52,11 @@ fireStore.setVote(112,
         afterRate: 1300
     },
     agreeCount: 10,
-    opposition: 5
-}, '-'
+    opposition: 5,
+    keep: 0,
+}, '+'
 );
+*/
 
 ( _this => {
 
