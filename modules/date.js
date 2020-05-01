@@ -1,9 +1,10 @@
-const moment = require("moment-timezone");
-const timezone = moment.tz("Asia/Tokyo");
+const moment = require("moment");
+require('moment-timezone');
+moment.tz.setDefault('Asia/Tokyo');
 
 module.exports = {
   now(format) {
-    return format ? timezone.clone().format(format) : timezone.clone();
+    return format ? moment().clone().format(format) : moment().clone();
   },
   convertToSeconds(value) {
     let seconds = 0;

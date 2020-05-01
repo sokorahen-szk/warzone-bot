@@ -89,7 +89,7 @@ module.exports = {
             keep: value
           };
         }
-        console.log(date.now("YYYY-MM-DD HH:mm:ss"))
+
         //有期間内だけ
         if(
           res[objName].beginDate <= date.now("YYYY-MM-DD HH:mm:ss")
