@@ -21,10 +21,10 @@
         "default": {},
         "order": ["tauntNo"],
         "rules": [
-            {"tauntNo": ["required", "regex:/^([1-9]|[1][0-1]|100)$/"]}
+            {"tauntNo": ["required", "regex:/^([1-9]|[1][0-1]|100|101|102)$/"]}
         ],
         "errors": {
-            "tauntNo": "タウント番号が正しくありません。\n範囲：1 ~ 11 , 100"
+            "tauntNo": "タウント番号が正しくありません。\n範囲：1 ~ 11 , 100 ~ 102"
         }
     },
     "vote": {
