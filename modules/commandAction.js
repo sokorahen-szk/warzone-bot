@@ -93,7 +93,7 @@ module.exports = {
         .then (res => {
             if(res.data) {
                 if(typeof res.data['ratio'] != 'undefined') {
-                    callback.channel.send(`${playerA}さん ${mode} ${playerB}さん との ${res.data.total} 試分のデータ\n勝利：${res.data.win}　敗北：${res.data.total - res.data.win}　勝率：${res.data.ratio}%`);
+                    callback.channel.send(`${playerA}さん ${mode} ${playerB}さん との ${res.data.total} 戦分のデータ\n勝利：${res.data.win}　敗北：${res.data.total - res.data.win}　勝率：${res.data.ratio}%`);
                 } else {
                     callback.channel.send("取得がうまくできなかったようです・・・");
                 }
