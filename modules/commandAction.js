@@ -70,6 +70,45 @@ module.exports = {
     },
 
     /*
+     * 投票　取り消し
+     */
+    'history-vs'(callback, botClient, options) {
+
+        let playerA = options.playerA.toLowerCase();
+        let playerB = options.playerB.toLowerCase();
+        let mode = options.mode.toLowerCase();
+        let gameCount = Number(options.gameCount);
+
+        httpClient.get(
+            {
+                params: {
+                    a: playerA,
+                    b: playerB,
+                    mode: mode,
+                    recent: gameCount
+                }
+            },
+            process.env.BASE_API_URL + 'vs_and'
+        )
+        .then (res => {
+            if(res.data) {
+                if(typeof res.data['ratio'] != 'undefined') {
+                    callback.channel.send(`${playerA}さん ${mode} ${playerB}さん との ${res.data.total} 試分のデータ\n勝利：${res.data.win}　敗北：${res.data.total - res.data.win}　勝率：${res.data.ratio}%`);
+                } else {
+                    callback.channel.send("取得がうまくできなかったようです・・・");
+                }
+            } else {
+                callback.channel.send("おや、BOTの様子がおかしいようだ。");
+            }
+        })
+        .catch ( err => {
+            notifiyAlertClient.post({content: err});
+        });
+
+        return;
+    },
+
+    /*
      * タウントを鳴らす
      */
     taunt(callback, botClient, options = []) {
@@ -169,6 +208,8 @@ module.exports = {
      */
     async vote(callback, botClient, options = {}, store) {
 
+        return ;
+
         let voteChannel = callback.guild.channels.cache.find( channel => channel.name == "vote")
         let seconds = date.convertToSeconds(options.times);
         let startDate = date.now("YYYY-MM-DD HH:mm:ss");
@@ -234,6 +275,8 @@ module.exports = {
      */
     async voteremove(callback, botClient, options = {}, store) {
 
+        return ;
+
         //取り消し処理
         if(store.votes[`${options.voteId}`]) {
 
@@ -264,5 +307,4 @@ module.exports = {
 
         return;
     }
-
 }

@@ -18,11 +18,11 @@ module.exports = {
         // コマンドではない場合は Null
         if(! this.isCommandCheck(command)) return null;
 
-        if(command.match(/^\/([a-zA-Z]+)$/)) {
-            commands.cmd = command.match(/^\/([a-zA-Z]+)$/)[1];
-        } else if(command.match(/^\/([a-zA-Z]+)\s(.+)/)) {
-            commands.cmd = command.match(/^\/([a-zA-Z]+)\s(.+)/)[1];
-            commands.options = command.match(/^\/([a-zA-Z]+)\s(.+)/)[2].split(' ');
+        if(command.match(/^\/([a-zA-Z_\-]+)$/)) {
+            commands.cmd = command.match(/^\/([a-zA-Z_\-]+)$/)[1];
+        } else if(command.match(/^\/([a-zA-Z_\-]+)\s(.+)/)) {
+            commands.cmd = command.match(/^\/([a-zA-Z_\-]+)\s(.+)/)[1];
+            commands.options = command.match(/^\/([a-zA-Z_\-]+)\s(.+)/)[2].split(' ');
         }
 
         return this.validCheck(commands);

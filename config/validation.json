@@ -15,6 +15,27 @@
             "gameCount": "試合数が正しくありません。"
         }
     },
+    "history-vs": {
+        "option": 4,
+        "requireOption": 2,
+        "default"     : {
+            "mode" : "vs",
+            "gameCount":    20
+        },
+        "order": ["playerA", "playerB", "mode", "gameCount"],
+        "rules": [
+            {"playerA": "min:2|max:30"},
+            {"playerB": "min:2|max:30"},
+            {"mode": ["required", "regex:/^(AND|and|VS|vs)$/"]},
+            {"gameCount": "numeric"}
+        ],
+        "errors": {
+            "playerA": "プレイヤーAが正しくありません",
+            "playerB": "プレイヤーBが正しくありません",
+            "mode": "モードが正しくありません。",
+            "recent": "試合数が正しくありません。"
+        }
+    },
     "taunt": {
         "option": 1,
         "requireOption": 1,
