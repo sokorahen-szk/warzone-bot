@@ -65,7 +65,7 @@
         "description":  "個人の勝利数、敗北数、勝率を見ることができます。"
     },
     "history-vs" : {
-        "command":      "/history-vs <playerA> <playerB> <vs|and> <gameCount>",
+        "command":      "/history-vs <playerA> <playerB> <gameCount>",
         "description":  "playerA と playerB との勝率を見る事ができます。"
     },
     "live" : {

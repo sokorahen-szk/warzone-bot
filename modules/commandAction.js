@@ -70,13 +70,12 @@ module.exports = {
     },
 
     /*
-     * 投票　取り消し
+     *  PlayerA　と　PlayerB　とのVS履歴
      */
     'history-vs'(callback, botClient, options) {
 
         let playerA = options.playerA.toLowerCase();
         let playerB = options.playerB.toLowerCase();
-        let mode = options.mode.toLowerCase();
         let gameCount = Number(options.gameCount);
 
         httpClient.get(
@@ -84,7 +83,7 @@ module.exports = {
                 params: {
                     a: playerA,
                     b: playerB,
-                    mode: mode,
+                    mode: 'vs',
                     recent: gameCount
                 }
             },
@@ -93,7 +92,7 @@ module.exports = {
         .then (res => {
             if(res.data) {
                 if(typeof res.data['ratio'] != 'undefined') {
-                    callback.channel.send(`${playerA}さん ${mode} ${playerB}さん との ${res.data.total} 戦分のデータ\n勝利：${res.data.win}　敗北：${res.data.total - res.data.win}　勝率：${res.data.ratio}%`);
+                    callback.channel.send(`${playerA}さん vs ${playerB}さん との ${res.data.total} 戦分のデータ\n勝利：${res.data.win}　敗北：${res.data.total - res.data.win}　勝率：${res.data.ratio}%`);
                 } else {
                     callback.channel.send("取得がうまくできなかったようです・・・");
                 }
